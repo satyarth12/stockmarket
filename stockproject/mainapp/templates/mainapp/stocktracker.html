@@ -8,17 +8,17 @@ Stock Tracker
 
 {%block css%}
 <style>
-.red {
-    color: red;
-  }
+    .red {
+        color: red;
+    }
 
-  .green {
-    color: green;
-  }
+    .green {
+        color: green;
+    }
 
-  .table-container {
-    overflow-x: scroll;
-  }
+    .table-container {
+        overflow-x: scroll;
+    }
 </style>
 {%endblock%}
 
@@ -48,7 +48,7 @@ Stock Tracker
                 <td id="{{key}}_prevprice">{{value|get:"Previous Close"|floatformat:4}}</td>
                 <td>{{value|get:"Open"}}</td>
                 <td id="{{key}}_change">
-                    <script> 
+                    <script>
                         var change = document.getElementById("{{key}}_price").innerHTML - document.getElementById("{{key}}_prevprice").innerHTML
                         change = Number((change).toFixed(4));
 
@@ -70,6 +70,33 @@ Stock Tracker
         </tbody>
     </table>
 </div>
+{{room_name|json_script:"room-name"}}
+<script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    var queryString = window.location.search;
+
+    queryString = queryString.substring(1);
+    console.log(queryString);
+    
+    const stockSocket = new WebSocket(
+        'ws://' +
+        window.location.host +
+        '/ws/stock/' +
+        roomName +
+        '/' +
+        '?' +
+        queryString
+    );
+    
+    console.log(stockSocket)
+
+    stockSocket.onmessage = function (e) {
+        console.log(e.data);
+        const data = JSON.parse(e.data);
+        console.log(data);
+    };
+
+</script>
 {%endblock%}
 
 {%block js%}
