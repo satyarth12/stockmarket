@@ -4,11 +4,13 @@ from yahoo_fin.stock_info import *
 
 import time
 import concurrent.futures
+import html5lib
 
 from channels.layers import get_channel_layer
 import asyncio
 
 import simplejson as json
+
 
 def get_quote(x):
     data = {}
